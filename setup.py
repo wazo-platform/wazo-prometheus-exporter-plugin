@@ -24,5 +24,8 @@ setup(
         'wazo_auth.http': [
             'metrics = wazo_prometheus_exporter.plugins.flask.metric.plugin:Plugin',
         ],
+        'wazo_dird.views': [
+            'metrics = wazo_prometheus_exporter.plugins.flask.metric.plugin:Plugin',
+        ],
     },
 )
