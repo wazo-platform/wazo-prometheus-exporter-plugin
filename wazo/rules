@@ -8,7 +8,7 @@ case "$1" in
         ;;
 
     package)
-        tar xvf dist/wazo-prometheus-exporter-plugin-*.tar.gz -C ${pkgdir}
+        tar xvf dist/wazo-prometheus-exporter-*.tar.gz -C ${pkgdir}
         cp -R etc ${pkgdir}/
         ;;
 
