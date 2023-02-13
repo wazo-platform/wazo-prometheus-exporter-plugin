@@ -18,7 +18,7 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     package_data={
-        'wazo_auth.plugins.http': ['*/api.yml'],
+        'wazo_prometheus_exporter.plugins.plugins.flask.metric': ['api.yml'],
     },
     entry_points={
         'wazo_auth.http': [
