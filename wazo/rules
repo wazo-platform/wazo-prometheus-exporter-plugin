@@ -15,12 +15,14 @@ case "$1" in
     install)
         systemctl restart wazo-auth || :
         systemctl restart wazo-dird || :
+        systemctl restart wazo-calld || :
         systemctl restart wazo-chatd || :
         ;;
 
     uninstall)
         systemctl restart wazo-auth || :
         systemctl restart wazo-dird || :
+        systemctl restart wazo-calld || :
         systemctl restart wazo-chatd || :
         ;;
 
