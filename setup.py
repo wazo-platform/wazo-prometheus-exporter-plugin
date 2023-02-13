@@ -22,7 +22,7 @@ setup(
     },
     entry_points={
         'wazo_auth.http': [
-            'metrics = wazo_auth.plugins.http.metric.plugin:Plugin',
+            'metrics = wazo_prometheus_exporter.plugins.flask.metric.plugin:Plugin',
         ],
     },
 )
