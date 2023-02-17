@@ -17,6 +17,10 @@ case "$1" in
         systemctl restart wazo-dird || :
         systemctl restart wazo-calld || :
         systemctl restart wazo-chatd || :
+        systemctl restart wazo-sysconfd || :
+        ln -sf  /etc/nginx/locations/https-available/wazo-sysconfd /etc/nginx/locations/https-enabled/wazo-sysconfd
+        systemctl nginx reload || :
+
         ;;
 
     uninstall)
@@ -24,6 +28,9 @@ case "$1" in
         systemctl restart wazo-dird || :
         systemctl restart wazo-calld || :
         systemctl restart wazo-chatd || :
+        systemctl restart wazo-sysconfd || :
+        rm -f /etc/nginx/locations/https-enabled/wazo-sysconfd
+        systemctl nginx reload || :
         ;;
 
     *)
