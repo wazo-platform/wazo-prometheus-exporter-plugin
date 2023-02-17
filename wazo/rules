@@ -17,6 +17,7 @@ case "$1" in
         systemctl restart wazo-dird || :
         systemctl restart wazo-calld || :
         systemctl restart wazo-chatd || :
+        systemctl restart wazo-sysconfd || :
         ;;
 
     uninstall)
@@ -24,6 +25,7 @@ case "$1" in
         systemctl restart wazo-dird || :
         systemctl restart wazo-calld || :
         systemctl restart wazo-chatd || :
+        systemctl restart wazo-sysconfd || :
         ;;
 
     *)
