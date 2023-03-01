@@ -13,13 +13,15 @@ case "$1" in
         ;;
 
     install)
+        sed -i '/ARGS=/c\ARGS="-nginx.scrape-uri http://127.0.0.1:8080/status"' /etc/default/prometheus-nginx-exporter
         systemctl restart wazo-auth || :
         systemctl restart wazo-dird || :
         systemctl restart wazo-calld || :
         systemctl restart wazo-chatd || :
         systemctl restart wazo-sysconfd || :
         ln -sf  /etc/nginx/locations/https-available/wazo-sysconfd /etc/nginx/locations/https-enabled/wazo-sysconfd
-        systemctl nginx reload || :
+        ln -sf /etc/nginx/sites-available/nginx-metrics /etc/nginx/sites-enabled/nginx-metrics
+        systemctl reload nginx || :
 
         ;;
 
@@ -30,7 +32,7 @@ case "$1" in
         systemctl restart wazo-chatd || :
         systemctl restart wazo-sysconfd || :
         rm -f /etc/nginx/locations/https-enabled/wazo-sysconfd
-        systemctl nginx reload || :
+        systemctl reload nginx || :
         ;;
 
     *)
