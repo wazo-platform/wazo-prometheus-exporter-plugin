@@ -1,0 +1,14 @@
+[Unit]
+Description=Rabbitmq Exporter
+After=docker.service
+Requires=docker.service
+
+[Service]
+TimeoutStartSec=0
+ExecStartPre=-/usr/bin/docker stop rabbitmq-exporter
+ExecStartPre=-/usr/bin/docker rm rabbitmq-exporter
+ExecStartPre=/usr/bin/docker pull kbudde/rabbitmq-exporter
+ExecStart=docker run -d --rm --net=host --name rabbitmq-exporter -e RABBIT_URL=http://127.0.0.1:5672/ kbudde/rabbitmq-exporter
+
+[Install]
+WantedBy=multi-user.target

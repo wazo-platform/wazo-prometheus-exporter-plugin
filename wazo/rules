@@ -13,6 +13,8 @@ case "$1" in
         ;;
 
     install)
+        systemctl enable rabbitmq_exporter
+        systemctl restart rabbitmq_exporter || :
         systemctl restart wazo-auth || :
         systemctl restart wazo-dird || :
         systemctl restart wazo-calld || :
