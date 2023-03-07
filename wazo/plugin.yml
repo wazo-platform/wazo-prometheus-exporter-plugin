@@ -13,3 +13,4 @@ debian_depends:
   - python3-prometheus-flask-exporter
   - python3-starlette-exporter
   - prometheus-nginx-exporter
+  - docker.io
