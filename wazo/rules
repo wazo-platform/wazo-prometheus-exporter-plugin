@@ -19,8 +19,9 @@ case "$1" in
         systemctl restart wazo-chatd || :
         systemctl restart wazo-sysconfd || :
         ln -sf  /etc/nginx/locations/https-available/wazo-sysconfd /etc/nginx/locations/https-enabled/wazo-sysconfd
+        ln -sf  /etc/nginx/locations/https-available/asterisk-metrics /etc/nginx/locations/https-enabled/asterisk-metrics
         systemctl nginx reload || :
-
+        asterisk -rx 'module load res_prometheus' || :
         ;;
 
     uninstall)
@@ -30,7 +31,9 @@ case "$1" in
         systemctl restart wazo-chatd || :
         systemctl restart wazo-sysconfd || :
         rm -f /etc/nginx/locations/https-enabled/wazo-sysconfd
+        rm -f /etc/nginx/locations/https-enabled/asterisk-metrics
         systemctl nginx reload || :
+        asterisk -rx 'module unload res_prometheus' || :
         ;;
 
     *)
