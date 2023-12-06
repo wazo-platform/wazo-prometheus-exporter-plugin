@@ -12,3 +12,4 @@ homepage: https://github.com/wazo-platform/wazo-prometheus-exporter-plugin
 debian_depends:
   - python3-prometheus-flask-exporter
   - python3-starlette-exporter
+  - prometheus-nginx-exporter
