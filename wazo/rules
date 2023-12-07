@@ -25,7 +25,6 @@ case "$1" in
         ln -sf /etc/nginx/sites-available/nginx-metrics /etc/nginx/sites-enabled/nginx-metrics
         asterisk -rx 'module load res_prometheus' || :
         systemctl reload nginx || :
-
         ;;
 
     uninstall)
