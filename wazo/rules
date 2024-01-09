@@ -25,9 +25,12 @@ case "$1" in
         ln -sf /etc/nginx/sites-available/nginx-metrics /etc/nginx/sites-enabled/nginx-metrics
         asterisk -rx 'module load res_prometheus' || :
         systemctl reload nginx || :
+        systemctl daemon-reload || :
+        systemctl start nginx-exporter
         ;;
 
     uninstall)
+        systemctl stop nginx-exporter || :
         systemctl restart wazo-auth || :
         systemctl restart wazo-dird || :
         systemctl restart wazo-calld || :
@@ -39,6 +42,7 @@ case "$1" in
         rm -f /etc/nginx/sites-enabled/nginx-metrics
         asterisk -rx 'module unload res_prometheus' || :
         systemctl reload nginx || :
+        systemctl daemon-reload || :
         ;;
 
     *)
