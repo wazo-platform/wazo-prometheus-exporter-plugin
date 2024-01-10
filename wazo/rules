@@ -14,6 +14,8 @@ case "$1" in
 
     install)
         sed -i '/ARGS=/c\ARGS="-nginx.scrape-uri http://127.0.0.1:8080/status"' /etc/default/prometheus-nginx-exporter
+        systemctl enable rabbitmq_exporter
+        systemctl restart rabbitmq_exporter || :
         systemctl restart wazo-auth || :
         systemctl restart wazo-dird || :
         systemctl restart wazo-calld || :
@@ -21,6 +23,7 @@ case "$1" in
         systemctl restart wazo-sysconfd || :
         ln -sf /etc/nginx/locations/https-available/wazo-sysconfd /etc/nginx/locations/https-enabled/wazo-sysconfd
         ln -sf /etc/nginx/locations/https-available/asterisk-metrics /etc/nginx/locations/https-enabled/asterisk-metrics
+        ln -sf /etc/nginx/locations/https-available/rabbitmq-metrics /etc/nginx/locations/https-enabled/rabbitmq-metrics
         ln -sf /etc/nginx/locations/https-available/nginx-metrics /etc/nginx/locations/https-enabled/nginx-metrics
         ln -sf /etc/nginx/sites-available/nginx-metrics /etc/nginx/sites-enabled/nginx-metrics
         asterisk -rx 'module load res_prometheus' || :
@@ -34,11 +37,15 @@ case "$1" in
         systemctl restart wazo-chatd || :
         systemctl restart wazo-sysconfd || :
         rm -f /etc/nginx/locations/https-enabled/wazo-sysconfd
+        rm -f /etc/nginx/locations/https-enabled/rabbitmq-metrics
         rm -f /etc/nginx/locations/https-enabled/asterisk-metrics
         rm -f /etc/nginx/locations/https-enabled/nginx-metrics
         rm -f /etc/nginx/sites-enabled/nginx-metrics
         asterisk -rx 'module unload res_prometheus' || :
         systemctl reload nginx || :
+        systemctl stop rabbitmq_exporter || :
+        systemctl disable rabbitmq_exporter || :
+        systemctl daemon-reload
         ;;
 
     *)
