@@ -1,23 +1,32 @@
 #!/bin/sh
-# Copyright 2023 Wazo Team (see the AUTHORS file)
+# Copyright 2023-2025 Wazo Team (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
 case "$1" in
     build)
         python3 setup.py bdist
+        URL=$(curl -s https://api.github.com/repos/prometheus/node_exporter/releases/latest| grep browser_download_url|grep linux-amd64|cut -d '"' -f 4)
+        wget $URL
+        filename=$(echo "$URL" | sed 's/.*\///')
+        tar xvf $filename
         ;;
 
     package)
         tar xvf dist/wazo-prometheus-exporter-*.tar.gz -C ${pkgdir}
+        mkdir -p ${pkgdir}/usr/local/bin
+        mv node_exporter-*.linux-amd64/node_exporter ${pkgdir}/usr/local/bin/
         cp -R etc ${pkgdir}/
         ;;
 
     install)
+        useradd -rs /bin/false node_exporter
         sed -i '/ARGS=/c\ARGS="-nginx.scrape-uri http://127.0.0.1:8080/status"' /etc/default/prometheus-nginx-exporter
         systemctl enable rabbitmq_exporter
         systemctl enable postgres_exporter
+        systemctl enable node_exporter
         systemctl restart rabbitmq_exporter || :
         systemctl restart postgres_exporter || :
+        systemctl restart node_exporter || :
         systemctl restart wazo-auth || :
         systemctl restart wazo-dird || :
         systemctl restart wazo-calld || :
@@ -27,6 +36,7 @@ case "$1" in
         ln -sf /etc/nginx/locations/https-available/asterisk-metrics /etc/nginx/locations/https-enabled/asterisk-metrics
         ln -sf /etc/nginx/locations/https-available/rabbitmq-metrics /etc/nginx/locations/https-enabled/rabbitmq-metrics
         ln -sf /etc/nginx/locations/https-available/postgres-metrics /etc/nginx/locations/https-enabled/postgres-metrics
+        ln -sf /etc/nginx/locations/https-available/node-metrics /etc/nginx/locations/https-enabled/node-metrics
         ln -sf /etc/nginx/locations/https-available/nginx-metrics /etc/nginx/locations/https-enabled/nginx-metrics
         ln -sf /etc/nginx/sites-available/nginx-metrics /etc/nginx/sites-enabled/nginx-metrics
         asterisk -rx 'module load res_prometheus' || :
@@ -43,15 +53,19 @@ case "$1" in
         rm -f /etc/nginx/locations/https-enabled/rabbitmq-metrics
         rm -f /etc/nginx/locations/https-enabled/asterisk-metrics
         rm -f /etc/nginx/locations/https-enabled/postgres-metrics
+        rm -f /etc/nginx/locations/https-enabled/node-metrics
         rm -f /etc/nginx/locations/https-enabled/nginx-metrics
         rm -f /etc/nginx/sites-enabled/nginx-metrics
         asterisk -rx 'module unload res_prometheus' || :
         systemctl reload nginx || :
         systemctl stop rabbitmq_exporter || :
         systemctl stop postgres_exporter || :
+        systemctl stop node_exporter || :
         systemctl disable rabbitmq_exporter || :
         systemctl disable postgres_exporter || :
+        systemctl disable node_exporter || :
         systemctl daemon-reload
+        userdel -r node_exporter || :
         ;;
 
     *)
