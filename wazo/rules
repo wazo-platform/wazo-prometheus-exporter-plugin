@@ -1,6 +1,27 @@
-#!/bin/sh
+#!/bin/bash
 # Copyright 2023-2025 Wazo Team (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
+
+declare -a nginx_locations=(
+    "wazo-sysconfd"
+    "asterisk-metrics"
+    "rabbitmq-metrics"
+    "postgres-metrics"
+    "node-metrics"
+    "nginx-metrics"
+)
+declare -a new_services=(
+    "rabbitmq_exporter"
+    "postgres_exporter"
+    "node_exporter"
+)
+declare -a to_restart=(
+    "wazo-auth"
+    "wazo-dird"
+    "wazo-calld"
+    "wazo-chatd"
+    "wazo-sysconfd"
+)
 
 case "$1" in
     build)
@@ -19,51 +40,37 @@ case "$1" in
         ;;
 
     install)
-        useradd -rs /bin/false node_exporter
         sed -i '/ARGS=/c\ARGS="-nginx.scrape-uri http://127.0.0.1:8080/status"' /etc/default/prometheus-nginx-exporter
-        systemctl enable rabbitmq_exporter
-        systemctl enable postgres_exporter
-        systemctl enable node_exporter
-        systemctl restart rabbitmq_exporter || :
-        systemctl restart postgres_exporter || :
-        systemctl restart node_exporter || :
-        systemctl restart wazo-auth || :
-        systemctl restart wazo-dird || :
-        systemctl restart wazo-calld || :
-        systemctl restart wazo-chatd || :
-        systemctl restart wazo-sysconfd || :
-        ln -sf /etc/nginx/locations/https-available/wazo-sysconfd /etc/nginx/locations/https-enabled/wazo-sysconfd
-        ln -sf /etc/nginx/locations/https-available/asterisk-metrics /etc/nginx/locations/https-enabled/asterisk-metrics
-        ln -sf /etc/nginx/locations/https-available/rabbitmq-metrics /etc/nginx/locations/https-enabled/rabbitmq-metrics
-        ln -sf /etc/nginx/locations/https-available/postgres-metrics /etc/nginx/locations/https-enabled/postgres-metrics
-        ln -sf /etc/nginx/locations/https-available/node-metrics /etc/nginx/locations/https-enabled/node-metrics
-        ln -sf /etc/nginx/locations/https-available/nginx-metrics /etc/nginx/locations/https-enabled/nginx-metrics
+        useradd -rs /bin/false node_exporter
+        for service in "${new_services[@]}"; do
+            systemctl enable $service || :
+            systemctl restart $service || :
+        done
+        for service in "${to_restart[@]}"; do
+            systemctl restart $service || :
+        done
+        for filename in "${nginx_locations[@]}"; do
+            ln -sf /etc/nginx/locations/https-available/$filename /etc/nginx/locations/https-enabled/$filename
+        done
         ln -sf /etc/nginx/sites-available/nginx-metrics /etc/nginx/sites-enabled/nginx-metrics
         asterisk -rx 'module load res_prometheus' || :
         systemctl reload nginx || :
         ;;
 
     uninstall)
-        systemctl restart wazo-auth || :
-        systemctl restart wazo-dird || :
-        systemctl restart wazo-calld || :
-        systemctl restart wazo-chatd || :
-        systemctl restart wazo-sysconfd || :
-        rm -f /etc/nginx/locations/https-enabled/wazo-sysconfd
-        rm -f /etc/nginx/locations/https-enabled/rabbitmq-metrics
-        rm -f /etc/nginx/locations/https-enabled/asterisk-metrics
-        rm -f /etc/nginx/locations/https-enabled/postgres-metrics
-        rm -f /etc/nginx/locations/https-enabled/node-metrics
-        rm -f /etc/nginx/locations/https-enabled/nginx-metrics
+        for service in "${new_services[@]}"; do
+            systemctl restart $service || :
+        done
+        for filename in "${nginx_locations[@]}"; do
+            rm -f /etc/nginx/locations/https-enabled/$filename
+        done
         rm -f /etc/nginx/sites-enabled/nginx-metrics
         asterisk -rx 'module unload res_prometheus' || :
         systemctl reload nginx || :
-        systemctl stop rabbitmq_exporter || :
-        systemctl stop postgres_exporter || :
-        systemctl stop node_exporter || :
-        systemctl disable rabbitmq_exporter || :
-        systemctl disable postgres_exporter || :
-        systemctl disable node_exporter || :
+        for service in "${new_services[@]}"; do
+            systemctl stop $service || :
+            systemctl disable $service || :
+        done
         systemctl daemon-reload
         userdel -r node_exporter || :
         ;;
