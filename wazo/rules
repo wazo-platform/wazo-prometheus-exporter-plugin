@@ -9,11 +9,13 @@ declare -a nginx_locations=(
     "postgres-metrics"
     "node-metrics"
     "nginx-metrics"
+    "process-metrics"
 )
 declare -a new_services=(
     "rabbitmq_exporter"
     "postgres_exporter"
     "node_exporter"
+    "process_exporter"
 )
 declare -a to_restart=(
     "wazo-auth"
