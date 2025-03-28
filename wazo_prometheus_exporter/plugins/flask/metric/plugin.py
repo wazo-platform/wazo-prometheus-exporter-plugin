@@ -27,4 +27,4 @@ class Plugin:
 
         path = f'{api.prefix}/metrics'
         logger.debug('Registering Prometheus metrics endpoint at %s', path)
-        self.metrics = PrometheusMetrics(api.app, path=path, group_by=path)
+        self.metrics = PrometheusMetrics(api.app, path=path, group_by='endpoint')
