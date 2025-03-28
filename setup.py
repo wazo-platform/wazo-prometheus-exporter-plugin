@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
-# Copyright 2023 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2023-2025 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import yaml
-
-from setuptools import find_packages
-from setuptools import setup
+from setuptools import find_packages, setup
 
 with open('wazo/plugin.yml') as file:
     metadata = yaml.load(file)
 
-flask_entry_point_path = 'metrics = wazo_prometheus_exporter.plugins.flask.metric.plugin:Plugin'
-fastapi_entry_point_path = 'metrics = wazo_prometheus_exporter.plugins.fastapi.metric.plugin:Plugin',
+flask_entry_point_path = (
+    'metrics = wazo_prometheus_exporter.plugins.flask.metric.plugin:Plugin'
+)
+fastapi_entry_point_path = (
+    'metrics = wazo_prometheus_exporter.plugins.fastapi.metric.plugin:Plugin',
+)
 
 flask_entry_point_key = [
     'wazo_auth.http',
@@ -24,7 +26,9 @@ fastapi_entry_point_key = [
 ]
 
 flask_entry_points = {key: flask_entry_point_path for key in flask_entry_point_key}
-fastapi_entry_points = {key: fastapi_entry_point_path for key in fastapi_entry_point_key}
+fastapi_entry_points = {
+    key: fastapi_entry_point_path for key in fastapi_entry_point_key
+}
 
 setup(
     name=metadata['name'],
@@ -32,7 +36,6 @@ setup(
     description=metadata['display_name'],
     author=metadata['author'],
     url=metadata['homepage'],
-
     packages=find_packages(),
     include_package_data=True,
     package_data={

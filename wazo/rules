@@ -29,30 +29,31 @@ case "$1" in
     build)
         python3 setup.py bdist
         URL=$(curl -s https://api.github.com/repos/prometheus/node_exporter/releases/latest| grep browser_download_url|grep linux-amd64|cut -d '"' -f 4)
-        wget $URL
+        wget "$URL"
         filename=$(echo "$URL" | sed 's/.*\///')
-        tar xvf $filename
+        tar xvf "$filename"
         ;;
 
     package)
-        tar xvf dist/wazo-prometheus-exporter-*.tar.gz -C ${pkgdir}
-        mkdir -p ${pkgdir}/usr/local/bin
-        mv node_exporter-*.linux-amd64/node_exporter ${pkgdir}/usr/local/bin/
-        cp -R etc ${pkgdir}/
+        # shellcheck disable=SC2154
+        tar xvf dist/wazo-prometheus-exporter-*.tar.gz -C "${pkgdir}"
+        mkdir -p "${pkgdir}/usr/local/bin"
+        mv node_exporter-*.linux-amd64/node_exporter "${pkgdir}/usr/local/bin/"
+        cp -R etc "${pkgdir}/"
         ;;
 
     install)
         sed -i '/ARGS=/c\ARGS="-nginx.scrape-uri http://127.0.0.1:8080/status"' /etc/default/prometheus-nginx-exporter
         useradd -rs /bin/false node_exporter
         for service in "${new_services[@]}"; do
-            systemctl enable $service || :
-            systemctl restart $service || :
+            systemctl enable "$service" || :
+            systemctl restart "$service" || :
         done
         for service in "${to_restart[@]}"; do
-            systemctl restart $service || :
+            systemctl restart "$service" || :
         done
         for filename in "${nginx_locations[@]}"; do
-            ln -sf /etc/nginx/locations/https-available/$filename /etc/nginx/locations/https-enabled/$filename
+            ln -sf "/etc/nginx/locations/https-available/$filename" "/etc/nginx/locations/https-enabled/$filename"
         done
         ln -sf /etc/nginx/sites-available/nginx-metrics /etc/nginx/sites-enabled/nginx-metrics
         asterisk -rx 'module load res_prometheus' || :
@@ -61,17 +62,17 @@ case "$1" in
 
     uninstall)
         for service in "${new_services[@]}"; do
-            systemctl restart $service || :
+            systemctl restart "$service" || :
         done
         for filename in "${nginx_locations[@]}"; do
-            rm -f /etc/nginx/locations/https-enabled/$filename
+            rm -f "/etc/nginx/locations/https-enabled/$filename"
         done
         rm -f /etc/nginx/sites-enabled/nginx-metrics
         asterisk -rx 'module unload res_prometheus' || :
         systemctl reload nginx || :
         for service in "${new_services[@]}"; do
-            systemctl stop $service || :
-            systemctl disable $service || :
+            systemctl stop "$service" || :
+            systemctl disable "$service" || :
         done
         systemctl daemon-reload
         userdel -r node_exporter || :

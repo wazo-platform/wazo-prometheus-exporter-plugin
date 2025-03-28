@@ -1,4 +1,4 @@
-# Copyright 2023 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2023-2025 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import re
@@ -22,4 +22,6 @@ class Plugin:
     def load(self, dependencies):
         api = dependencies['api']
 
-        self.metrics = PrometheusMetrics(api.app, path=f'{api.prefix}/metrics', group_by=path)
+        self.metrics = PrometheusMetrics(
+            api.app, path=f'{api.prefix}/metrics', group_by=path
+        )
