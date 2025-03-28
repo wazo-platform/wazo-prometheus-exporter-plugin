@@ -28,6 +28,7 @@ declare -a to_restart=(
     "wazo-chatd"
     "wazo-phoned"
     "wazo-sysconfd"
+    "wazo-webhookd"
 )
 
 case "$1" in
