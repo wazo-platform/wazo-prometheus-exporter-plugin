@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright 2023 The Wazo Authors  (see the AUTHORS file)
+# Copyright 2023-2025 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import yaml
@@ -15,6 +15,7 @@ fastapi_entry_point_path = 'metrics = wazo_prometheus_exporter.plugins.fastapi.m
 
 flask_entry_point_key = [
     'wazo_agentd.plugins',
+    'wazo_amid.plugins',
     'wazo_auth.http',
     'wazo_calld.plugins',
     'wazo_dird.views',

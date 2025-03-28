@@ -19,6 +19,7 @@ declare -a new_services=(
 )
 declare -a to_restart=(
     "wazo-agentd"
+    "wazo-amid"
     "wazo-auth"
     "wazo-confd"
     "wazo-dird"
