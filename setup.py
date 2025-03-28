@@ -24,6 +24,7 @@ flask_entry_point_key = [
     'wazo_dird.views',
     'wazo_chatd.plugins',
     'wazo_confd.plugins',
+    'wazo_phoned.plugins',
 ]
 fastapi_entry_point_key = [
     'wazo_sysconfd.plugins',
