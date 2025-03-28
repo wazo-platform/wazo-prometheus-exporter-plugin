@@ -21,6 +21,7 @@ wazo-plugind-cli -c "install git https://github.com/wazo-platform/wazo-prometheu
 * wazo-chatd `/api/chatd/1.0/metrics`
 * wazo-confd `/api/confd/1.1/metrics`
 * wazo-dird `/api/dird/0.1/metrics`
+* wazo-phoned `:9499/0.1/metrics`
 * wazo-sysconfd `/api/sysconfd/metrics`
 
 ## Prometheus scrape config
