@@ -16,6 +16,7 @@ wazo-plugind-cli -c "install git https://github.com/wazo-platform/wazo-prometheu
 * wazo-agentd `/api/agentd/1.0/metrics`
 * wazo-amid `/api/amid/1.0/metrics`
 * wazo-auth `/api/auth/0.1/metrics`
+* wazo-call-logd `api/call-logd/1.0/metrics`
 * wazo-calld `/api/calld/1.0/metrics`
 * wazo-chatd `/api/chatd/1.0/metrics`
 * wazo-confd `/api/confd/1.1/metrics`
