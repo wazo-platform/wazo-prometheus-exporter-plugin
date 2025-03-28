@@ -1,0 +1,16 @@
+[Unit]
+Description=Postgresql Exporter
+After=docker.service
+Requires=docker.service
+
+[Service]
+TimeoutStartSec=0
+Restart=always
+ExecStartPre=-/usr/bin/docker stop %n
+ExecStartPre=-/usr/bin/docker rm %n
+ExecStartPre=/usr/bin/docker pull quay.io/prometheuscommunity/postgres-exporter
+
+ExecStart=docker run --net=host -e DATA_SOURCE_NAME="postgresql://asterisk:proformatique@localhost:5432/asterisk?sslmode=disable" quay.io/prometheuscommunity/postgres-exporter --web.listen-address=127.0.0.1:9187
+
+[Install]
+WantedBy=multi-user.target
