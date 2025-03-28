@@ -13,11 +13,17 @@ wazo-plugind-cli -c "install git https://github.com/wazo-platform/wazo-prometheu
 * asterisk `/api/asterisk/metrics`
 * nginx `/api/nginx/metrics`
 * rabbitmq `/api/rabbitmq/metrics`
+* wazo-agentd `/api/agentd/1.0/metrics`
+* wazo-amid `/api/amid/1.0/metrics`
 * wazo-auth `/api/auth/0.1/metrics`
+* wazo-call-logd `api/call-logd/1.0/metrics`
 * wazo-calld `/api/calld/1.0/metrics`
 * wazo-chatd `/api/chatd/1.0/metrics`
+* wazo-confd `/api/confd/1.1/metrics`
 * wazo-dird `/api/dird/0.1/metrics`
+* wazo-phoned `:9499/0.1/metrics`
 * wazo-sysconfd `/api/sysconfd/metrics`
+* wazo-webhookd `/api/webhookd/1.0/metrics`
 
 ## Prometheus scrape config
 
