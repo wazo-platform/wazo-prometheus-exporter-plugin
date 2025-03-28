@@ -21,7 +21,11 @@ wazo-plugind-cli -c "install git https://github.com/wazo-platform/wazo-prometheu
 
 ## Prometheus scrape config
 
-On the prometheus instance server, those endpoints need to be configured in the prometheus config:
+On the Prometheus instance server, the relevant endpoints must be configured in
+the Prometheus configuration file. The `targets` field should include the Wazo
+server's IP address. You may need to update this field to reflect the correct IP
+address.
+
 
 ``````yaml
 scrape_configs:
@@ -33,6 +37,10 @@ scrape_configs:
     metrics_path: /api/auth/0.1/metrics
     static_configs:
       - targets: ['localhost:443']
+        labels:
+          framework: 'flask'
+          service: 'wazo-auth'
+
   - job_name: wazo-calld
     scheme: https
     tls_config:
@@ -40,6 +48,10 @@ scrape_configs:
     metrics_path: /api/calld/1.0/metrics
     static_configs:
       - targets: ['localhost:443']
+        labels:
+          framework: 'flask'
+          service: 'wazo-calld'
+
   - job_name: wazo-chatd
     scheme: https
     tls_config:
@@ -47,13 +59,10 @@ scrape_configs:
     metrics_path: /api/chatd/1.0/metrics
     static_configs:
       - targets: ['localhost:443']
-  - job_name: wazo-sysconfd
-    scheme: https
-    tls_config:
-      insecure_skip_verify: true
-    metrics_path: /api/sysconfd/metrics
-    static_configs:
-      - targets: ['localhost:443']
+        labels:
+          framework: 'flask'
+          service: 'wazo-chatd'
+
   - job_name: wazo-dird
     scheme: https
     tls_config:
@@ -61,6 +70,29 @@ scrape_configs:
     metrics_path: /api/dird/0.1/metrics
     static_configs:
       - targets: ['localhost:443']
+        labels:
+          framework: 'flask'
+          service: 'wazo-dird'
+
+  - job_name: wazo-sysconfd
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    metrics_path: /api/sysconfd/metrics
+    static_configs:
+      - targets: ['localhost:443']
+        labels:
+          framework: 'fastapi'
+          service: 'wazo-sysconfd'
+
+  - job_name: 'asterisk'
+    metrics_path: /api/asterisk/metrics
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    static_configs:
+      - targets: ['localhost:443']
+
   - job_name: nginx
     scheme: https
     tls_config:
@@ -68,11 +100,36 @@ scrape_configs:
     metrics_path: /api/nginx/metrics
     static_configs:
       - targets: ['localhost:443']
+
   - job_name: rabbitmq
     scheme: https
     tls_config:
       insecure_skip_verify: true
     metrics_path: /api/rabbitmq/metrics
+    static_configs:
+      - targets: ['localhost:443']
+
+  - job_name: postgresql
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    metrics_path: /api/postgresql/metrics
+    static_configs:
+      - targets: ['localhost:443']
+
+  - job_name: node
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    metrics_path: /api/node/metrics
+    static_configs:
+      - targets: ['localhost:443']
+
+  - job_name: process
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    metrics_path: /api/process/metrics
     static_configs:
       - targets: ['localhost:443']
 ```
