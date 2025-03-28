@@ -2,8 +2,11 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import re
+import logging
 
 from prometheus_flask_exporter import PrometheusMetrics
+
+logger = logging.getLogger(__name__)
 
 TOKEN_URL_RE = re.compile(r"/token/([a-zA-Z0-9-]+)")
 ANONYMIZED_TOKEN = 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX'
@@ -22,6 +25,6 @@ class Plugin:
     def load(self, dependencies):
         api = dependencies['api']
 
-        self.metrics = PrometheusMetrics(
-            api.app, path=f'{api.prefix}/metrics', group_by=path
-        )
+        path = f'{api.prefix}/metrics'
+        logger.debug('Registering Prometheus metrics endpoint at %s', path)
+        self.metrics = PrometheusMetrics(api.app, path=path, group_by=path)
