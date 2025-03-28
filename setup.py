@@ -16,6 +16,7 @@ fastapi_entry_point_path = (
 )
 
 flask_entry_point_key = [
+    'wazo_agentd.plugins',
     'wazo_auth.http',
     'wazo_calld.plugins',
     'wazo_dird.views',

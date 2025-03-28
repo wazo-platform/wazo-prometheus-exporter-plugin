@@ -13,6 +13,7 @@ wazo-plugind-cli -c "install git https://github.com/wazo-platform/wazo-prometheu
 * asterisk `/api/asterisk/metrics`
 * nginx `/api/nginx/metrics`
 * rabbitmq `/api/rabbitmq/metrics`
+* wazo-agentd `/api/agentd/1.0/metrics`
 * wazo-auth `/api/auth/0.1/metrics`
 * wazo-calld `/api/calld/1.0/metrics`
 * wazo-chatd `/api/chatd/1.0/metrics`
