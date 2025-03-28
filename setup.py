@@ -14,6 +14,7 @@ flask_entry_point_path = 'metrics = wazo_prometheus_exporter.plugins.flask.metri
 fastapi_entry_point_path = 'metrics = wazo_prometheus_exporter.plugins.fastapi.metric.plugin:Plugin',
 
 flask_entry_point_key = [
+    'wazo_agentd.plugins',
     'wazo_auth.http',
     'wazo_calld.plugins',
     'wazo_dird.views',

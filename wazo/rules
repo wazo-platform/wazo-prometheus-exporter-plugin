@@ -18,6 +18,7 @@ declare -a new_services=(
     "process_exporter"
 )
 declare -a to_restart=(
+    "wazo-agentd"
     "wazo-auth"
     "wazo-confd"
     "wazo-dird"
