@@ -4,6 +4,7 @@
 
 declare -a nginx_locations=(
     "wazo-sysconfd"
+    "wazo-phoned-metrics"
     "asterisk-metrics"
     "rabbitmq-metrics"
     "postgres-metrics"
