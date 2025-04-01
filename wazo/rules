@@ -4,6 +4,7 @@
 
 declare -a nginx_locations=(
     "wazo-sysconfd"
+    "wazo-phoned-metrics"
     "asterisk-metrics"
     "rabbitmq-metrics"
     "postgres-metrics"
@@ -18,11 +19,17 @@ declare -a new_services=(
     "process_exporter"
 )
 declare -a to_restart=(
+    "wazo-agentd"
+    "wazo-amid"
     "wazo-auth"
+    "wazo-call-logd"
+    "wazo-confd"
     "wazo-dird"
     "wazo-calld"
     "wazo-chatd"
+    "wazo-phoned"
     "wazo-sysconfd"
+    "wazo-webhookd"
 )
 
 case "$1" in

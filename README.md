@@ -13,11 +13,17 @@ wazo-plugind-cli -c "install git https://github.com/wazo-platform/wazo-prometheu
 * asterisk `/api/asterisk/metrics`
 * nginx `/api/nginx/metrics`
 * rabbitmq `/api/rabbitmq/metrics`
+* wazo-agentd `/api/agentd/1.0/metrics`
+* wazo-amid `/api/amid/1.0/metrics`
 * wazo-auth `/api/auth/0.1/metrics`
+* wazo-call-logd `api/call-logd/1.0/metrics`
 * wazo-calld `/api/calld/1.0/metrics`
 * wazo-chatd `/api/chatd/1.0/metrics`
+* wazo-confd `/api/confd/1.1/metrics`
 * wazo-dird `/api/dird/0.1/metrics`
+* wazo-phoned `/api/phoned/0.1/metrics`
 * wazo-sysconfd `/api/sysconfd/metrics`
+* wazo-webhookd `/api/webhookd/1.0/metrics`
 
 ## Prometheus scrape config
 
@@ -26,10 +32,31 @@ the Prometheus configuration file. The `targets` field should include the Wazo
 server's IP address. You may need to update this field to reflect the correct IP
 address.
 
-
-``````yaml
+```yaml
 scrape_configs:
   ...
+  - job_name: wazo-agentd
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    metrics_path: /api/agentd/1.0/metrics
+    static_configs:
+      - targets: ['localhost:443']
+        labels:
+          framework: 'flask'
+          service: 'wazo-agentd'
+
+  - job_name: wazo-amid
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    metrics_path: /api/amid/1.0/metrics
+    static_configs:
+      - targets: ['localhost:443']
+        labels:
+          framework: 'flask'
+          service: 'wazo-amid'
+
   - job_name: wazo-auth
     scheme: https
     tls_config:
@@ -40,6 +67,17 @@ scrape_configs:
         labels:
           framework: 'flask'
           service: 'wazo-auth'
+
+  - job_name: wazo-call-logd
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    metrics_path: /api/call-logd/1.0/metrics
+    static_configs:
+      - targets: ['localhost:443']
+        labels:
+          framework: 'flask'
+          service: 'wazo-call-logd'
 
   - job_name: wazo-calld
     scheme: https
@@ -63,6 +101,17 @@ scrape_configs:
           framework: 'flask'
           service: 'wazo-chatd'
 
+  - job_name: wazo-confd
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    metrics_path: /api/confd/1.1/metrics
+    static_configs:
+      - targets: ['localhost:443']
+        labels:
+          framework: 'flask'
+          service: 'wazo-confd'
+
   - job_name: wazo-dird
     scheme: https
     tls_config:
@@ -74,6 +123,17 @@ scrape_configs:
           framework: 'flask'
           service: 'wazo-dird'
 
+  - job_name: wazo-phoned
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    metrics_path: /api/phoned/0.1/metrics
+    static_configs:
+      - targets: ['localhost:443']
+        labels:
+          framework: 'flask'
+          service: 'wazo-phoned'
+
   - job_name: wazo-sysconfd
     scheme: https
     tls_config:
@@ -84,6 +144,17 @@ scrape_configs:
         labels:
           framework: 'fastapi'
           service: 'wazo-sysconfd'
+
+  - job_name: wazo-webhookd
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    metrics_path: /api/webhookd/1.0/metrics
+    static_configs:
+      - targets: ['localhost:443']
+        labels:
+          framework: 'flask'
+          service: 'wazo-webhookd'
 
   - job_name: 'asterisk'
     metrics_path: /api/asterisk/metrics

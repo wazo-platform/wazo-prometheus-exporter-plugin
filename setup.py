@@ -16,10 +16,16 @@ fastapi_entry_point_path = (
 )
 
 flask_entry_point_key = [
+    'wazo_agentd.plugins',
+    'wazo_amid.plugins',
     'wazo_auth.http',
+    'wazo_call_logd.plugins',
     'wazo_calld.plugins',
     'wazo_dird.views',
     'wazo_chatd.plugins',
+    'wazo_confd.plugins',
+    'wazo_phoned.plugins',
+    'wazo_webhookd.plugins',
 ]
 fastapi_entry_point_key = [
     'wazo_sysconfd.plugins',
