@@ -50,6 +50,10 @@ case "$1" in
         ;;
 
     install)
+        # Should be the first step to allow setupd for reconnecting and
+        # publishing progress.
+        systemctl restart rabbitmq-server || :
+
         sed -i '/ARGS=/c\ARGS="-nginx.scrape-uri http://127.0.0.1:8080/status"' /etc/default/prometheus-nginx-exporter
         useradd -rs /bin/false node_exporter
         for service in "${new_services[@]}"; do
@@ -68,6 +72,11 @@ case "$1" in
         ;;
 
     uninstall)
+        # Should be the first step to allow setupd for reconnecting and
+        # publishing progress.
+        rm -f /etc/rabbitmq/enabled_plugins
+        systemctl restart rabbitmq-server || :
+
         for service in "${new_services[@]}"; do
             systemctl restart "$service" || :
         done
