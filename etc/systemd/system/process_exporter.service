@@ -6,10 +6,17 @@ Requires=docker.service
 [Service]
 TimeoutStartSec=0
 Restart=always
-ExecStartPre=-/usr/bin/docker stop process-exporter
-ExecStartPre=-/usr/bin/docker rm process-exporter
+ExecStartPre=-/usr/bin/docker stop %n
+ExecStartPre=-/usr/bin/docker rm %n
 ExecStartPre=/usr/bin/docker pull ncabatoff/process-exporter
-ExecStart=/usr/bin/docker run -d --name process-exporter --rm -p 127.0.0.1:9256:9256 --privileged -v /proc:/host/proc:ro -v /etc/process_exporter:/config:ro ncabatoff/process-exporter --procfs /host/proc -config.path /config/process.yml
+ExecStart=/usr/bin/docker run \
+    --rm \
+    --name %n \
+    --publish 127.0.0.1:9256:9256 \
+    --privileged \
+    --volume /proc:/host/proc:ro \
+    --volume /etc/process_exporter:/config:ro \
+    ncabatoff/process-exporter --procfs /host/proc -config.path /config/process.yml
 
 [Install]
 WantedBy=multi-user.target
