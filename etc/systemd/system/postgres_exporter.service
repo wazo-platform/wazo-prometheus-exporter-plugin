@@ -11,11 +11,11 @@ ExecStartPre=-/usr/bin/docker rm %n
 ExecStartPre=/usr/bin/docker pull quay.io/prometheuscommunity/postgres-exporter
 ExecStart=/usr/bin/docker run \
     --rm \
-    --name %n \
+    --name=%n \
     --network=host \
-    --env DATA_SOURCE_URI="localhost:5432/postgres?sslmode=disable" \
-    --env DATA_SOURCE_USER="postgres_exporter" \
-    --env DATA_SOURCE_PASS="postgres-exporter-password" \
+    --env=DATA_SOURCE_URI="localhost:5432/postgres?sslmode=disable" \
+    --env=DATA_SOURCE_USER="postgres_exporter" \
+    --env=DATA_SOURCE_PASS="postgres-exporter-password" \
     quay.io/prometheuscommunity/postgres-exporter --web.listen-address=127.0.0.1:9187
 
 [Install]
