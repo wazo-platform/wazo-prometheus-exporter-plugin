@@ -11,11 +11,11 @@ ExecStartPre=-/usr/bin/docker rm %n
 ExecStartPre=/usr/bin/docker pull ncabatoff/process-exporter
 ExecStart=/usr/bin/docker run \
     --rm \
-    --name %n \
-    --publish 127.0.0.1:9256:9256 \
+    --name=%n \
+    --publish=127.0.0.1:9256:9256 \
     --privileged \
-    --volume /proc:/host/proc:ro \
-    --volume /etc/process_exporter:/config:ro \
+    --volume=/proc:/host/proc:ro \
+    --volume=/etc/process_exporter:/config:ro \
     ncabatoff/process-exporter --procfs /host/proc -config.path /config/process.yml
 
 [Install]
