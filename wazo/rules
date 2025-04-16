@@ -54,6 +54,13 @@ case "$1" in
         # publishing progress.
         systemctl restart rabbitmq-server || :
 
+        sudo -u postgres psql << EOF
+CREATE USER postgres_exporter WITH PASSWORD 'postgres-exporter-password';
+ALTER USER postgres_exporter SET SEARCH_PATH TO postgres_exporter,pg_catalog;
+GRANT CONNECT ON DATABASE postgres TO postgres_exporter;
+GRANT pg_monitor to postgres_exporter;
+EOF
+
         sed -i '/ARGS=/c\ARGS="-nginx.scrape-uri http://127.0.0.1:8080/status"' /etc/default/prometheus-nginx-exporter
         useradd -rs /bin/false node_exporter
         for service in "${new_services[@]}"; do
@@ -76,6 +83,11 @@ case "$1" in
         # publishing progress.
         rm -f /etc/rabbitmq/enabled_plugins
         systemctl restart rabbitmq-server || :
+
+        sudo -u postgres psql << EOF
+REVOKE CONNECT ON DATABASE postgres FROM postgres_exporter;
+DROP ROLE postgres_exporter;
+EOF
 
         for service in "${new_services[@]}"; do
             systemctl restart "$service" || :
