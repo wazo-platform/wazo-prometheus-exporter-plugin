@@ -1,5 +1,6 @@
 process_names:
-  - comm:
-    - postgres
-    - nginx
+  - name: "{{.Comm}}"
+    comm:
     - asterisk
+    - nginx
+    - postgres
