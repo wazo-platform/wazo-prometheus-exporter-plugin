@@ -69,11 +69,13 @@ EOF
         for service in "${to_restart[@]}"; do
             systemctl restart "$service" || :
         done
+
+        asterisk -rx 'module load res_prometheus' || :
+
         for filename in "${nginx_locations[@]}"; do
             ln -sf "/etc/nginx/locations/https-available/$filename" "/etc/nginx/locations/https-enabled/$filename"
         done
         ln -sf /etc/nginx/sites-available/nginx-metrics /etc/nginx/sites-enabled/nginx-metrics
-        asterisk -rx 'module load res_prometheus' || :
         systemctl reload nginx || :
 
         sed -i '/ARGS=/c\ARGS="-nginx.scrape-uri http://127.0.0.1:8080/status"' /etc/default/prometheus-nginx-exporter
