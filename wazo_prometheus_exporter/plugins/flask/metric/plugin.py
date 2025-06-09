@@ -3,7 +3,7 @@
 
 import logging
 
-from prometheus_flask_exporter import PrometheusMetrics
+from prometheus_flask_exporter import RESTfulPrometheusMetrics
 
 logger = logging.getLogger(__name__)
 
@@ -14,4 +14,4 @@ class Plugin:
 
         path = f'{api.prefix}/metrics'
         logger.debug('Registering Prometheus metrics endpoint at %s', path)
-        PrometheusMetrics(api.app, path=path, group_by='endpoint')
+        RESTfulPrometheusMetrics(api.app, api, path=path, group_by='endpoint')
