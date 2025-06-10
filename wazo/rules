@@ -2,16 +2,6 @@
 # Copyright 2023-2025 Wazo Team (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
-declare -a nginx_locations=(
-    "wazo-sysconfd"
-    "wazo-phoned-metrics"
-    "asterisk-metrics"
-    "rabbitmq-metrics"
-    "postgres-metrics"
-    "node-metrics"
-    "nginx-metrics"
-    "process-metrics"
-)
 declare -a new_services=(
     "rabbitmq_exporter"
     "postgres_exporter"
@@ -72,10 +62,9 @@ EOF
 
         asterisk -rx 'module load res_prometheus' || :
 
-        for filename in "${nginx_locations[@]}"; do
-            ln -sf "/etc/nginx/locations/https-available/$filename" "/etc/nginx/locations/https-enabled/$filename"
-        done
+        ln -sf /etc/nginx/locations/https-available/block-metrics /etc/nginx/locations/https-enabled/block-metrics
         ln -sf /etc/nginx/sites-available/nginx-metrics /etc/nginx/sites-enabled/nginx-metrics
+        ln -sf /etc/nginx/sites-available/zzz-proxy-metrics /etc/nginx/sites-enabled/zzz-proxy-metrics
         systemctl reload nginx || :
 
         sed -i '/ARGS=/c\ARGS="-nginx.scrape-uri http://127.0.0.1:8080/status"' /etc/default/prometheus-nginx-exporter
@@ -97,12 +86,14 @@ EOF
         for service in "${new_services[@]}"; do
             systemctl restart "$service" || :
         done
-        for filename in "${nginx_locations[@]}"; do
-            rm -f "/etc/nginx/locations/https-enabled/$filename"
-        done
+
+        rm -f /etc/nginx/locations/https-enabled/block-metrics
         rm -f /etc/nginx/sites-enabled/nginx-metrics
-        asterisk -rx 'module unload res_prometheus' || :
+        rm -f /etc/nginx/sites-enabled/zzz-proxy-metrics
         systemctl reload nginx || :
+
+        asterisk -rx 'module unload res_prometheus' || :
+
         for service in "${new_services[@]}"; do
             systemctl stop "$service" || :
             systemctl disable "$service" || :
