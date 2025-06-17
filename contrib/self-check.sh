@@ -1,6 +1,6 @@
 #!/bin/bash
 
-hostname="${1:localhost}"
+hostname="${1:-localhost}"
 
 METRICS=$(cat <<- EOV
     /amid/1.0/metrics
