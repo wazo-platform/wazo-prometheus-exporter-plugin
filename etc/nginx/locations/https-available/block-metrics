@@ -1,0 +1,34 @@
+# Do not expose metrics endpoints on port 443
+
+location = /api/agentd/1.0/metrics {
+    deny all;
+}
+location = /api/amid/1.0/metrics {
+    deny all;
+}
+location = /api/auth/0.1/metrics {
+    deny all;
+}
+location = /api/calld/1.0/metrics {
+    deny all;
+}
+location = /api/chatd/1.0/metrics {
+    deny all;
+}
+location = /api/confd/1.1/metrics {
+    deny all;
+}
+location = /api/call-logd/1.0/metrics {
+    deny all;
+}
+location = /api/dird/0.1/metrics {
+    deny all;
+}
+location = /api/webhookd/1.0/metrics {
+    deny all;
+}
+
+# Future proof
+location = /api/phoned/0.1/metrics {
+    deny all;
+}

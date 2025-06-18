@@ -1,8 +1,0 @@
-location = /api/node/metrics {
-    proxy_pass http://127.0.0.1:9100/metrics;
-
-    proxy_set_header    Host                $http_host;
-    proxy_set_header    X-Script-Name       /api/node;
-    proxy_set_header    X-Forwarded-For     $proxy_add_x_forwarded_for;
-    proxy_set_header    X-Forwarded-Proto   $scheme;
-}
