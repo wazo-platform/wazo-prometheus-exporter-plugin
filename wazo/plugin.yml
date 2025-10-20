@@ -1,9 +1,9 @@
 name: wazo-prometheus-exporter
 namespace: wazoplatform
-version: 0.0.5
+version: 0.0.6
 author: Wazo authors
 display_name: Prometheus Metrics
-min_wazo_version: 23.06
+min_wazo_version: 25.15
 tags:
   - prometheus
   - metrics
