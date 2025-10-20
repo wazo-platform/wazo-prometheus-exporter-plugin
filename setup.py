@@ -6,7 +6,7 @@ import yaml
 from setuptools import find_packages, setup
 
 with open('wazo/plugin.yml') as file:
-    metadata = yaml.load(file)
+    metadata = yaml.load(file, Loader=yaml.SafeLoader)
 
 flask_entry_point_path = (
     'metrics = wazo_prometheus_exporter.plugins.flask.metric.plugin:Plugin'
