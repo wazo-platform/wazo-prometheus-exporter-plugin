@@ -14,20 +14,20 @@ wazo-plugind-cli -c "install git https://github.com/wazo-platform/wazo-prometheu
 > Internal metrics will be available on **port 6387**. This port must be closed
 > by a firewall to avoid exposing the metrics to the public.
 
-- asterisk `/api/asterisk/metrics`
-- nginx `/api/nginx/metrics`
-- rabbitmq `/api/rabbitmq/metrics`
-- wazo-agentd `/api/agentd/1.0/metrics`
-- wazo-amid `/api/amid/1.0/metrics`
-- wazo-auth `/api/auth/0.1/metrics`
-- wazo-call-logd `api/call-logd/1.0/metrics`
-- wazo-calld `/api/calld/1.0/metrics`
-- wazo-chatd `/api/chatd/1.0/metrics`
-- wazo-confd `/api/confd/1.1/metrics`
-- wazo-dird `/api/dird/0.1/metrics`
-- wazo-phoned `/api/phoned/0.1/metrics`
-- wazo-sysconfd `/api/sysconfd/metrics`
-- wazo-webhookd `/api/webhookd/1.0/metrics`
+- asterisk `/asterisk/metrics`
+- nginx `/nginx/metrics`
+- rabbitmq `/rabbitmq/metrics`
+- wazo-agentd `/agentd/1.0/metrics`
+- wazo-amid `/amid/1.0/metrics`
+- wazo-auth `/auth/0.1/metrics`
+- wazo-call-logd `/call-logd/1.0/metrics`
+- wazo-calld `/calld/1.0/metrics`
+- wazo-chatd `/chatd/1.0/metrics`
+- wazo-confd `/confd/1.1/metrics`
+- wazo-dird `/dird/0.1/metrics`
+- wazo-phoned `/phoned/0.1/metrics`
+- wazo-sysconfd `/sysconfd/metrics`
+- wazo-webhookd `/webhookd/1.0/metrics`
 
 ## Prometheus scrape config
 
@@ -41,7 +41,7 @@ scrape_configs:
   ...
   - job_name: wazo-agentd
     scheme: http
-    metrics_path: /api/agentd/1.0/metrics
+    metrics_path: /agentd/1.0/metrics
     static_configs:
       - targets: ['localhost:6387']
         labels:
@@ -50,7 +50,7 @@ scrape_configs:
 
   - job_name: wazo-amid
     scheme: http
-    metrics_path: /api/amid/1.0/metrics
+    metrics_path: /amid/1.0/metrics
     static_configs:
       - targets: ['localhost:6387']
         labels:
@@ -59,7 +59,7 @@ scrape_configs:
 
   - job_name: wazo-auth
     scheme: http
-    metrics_path: /api/auth/0.1/metrics
+    metrics_path: /auth/0.1/metrics
     static_configs:
       - targets: ['localhost:6387']
         labels:
@@ -68,7 +68,7 @@ scrape_configs:
 
   - job_name: wazo-call-logd
     scheme: http
-    metrics_path: /api/call-logd/1.0/metrics
+    metrics_path: /call-logd/1.0/metrics
     static_configs:
       - targets: ['localhost:6387']
         labels:
@@ -77,7 +77,7 @@ scrape_configs:
 
   - job_name: wazo-calld
     scheme: http
-    metrics_path: /api/calld/1.0/metrics
+    metrics_path: /calld/1.0/metrics
     static_configs:
       - targets: ['localhost:6387']
         labels:
@@ -86,7 +86,7 @@ scrape_configs:
 
   - job_name: wazo-chatd
     scheme: http
-    metrics_path: /api/chatd/1.0/metrics
+    metrics_path: /chatd/1.0/metrics
     static_configs:
       - targets: ['localhost:6387']
         labels:
@@ -95,7 +95,7 @@ scrape_configs:
 
   - job_name: wazo-confd
     scheme: http
-    metrics_path: /api/confd/1.1/metrics
+    metrics_path: /confd/1.1/metrics
     static_configs:
       - targets: ['localhost:6387']
         labels:
@@ -104,7 +104,7 @@ scrape_configs:
 
   - job_name: wazo-dird
     scheme: http
-    metrics_path: /api/dird/0.1/metrics
+    metrics_path: /dird/0.1/metrics
     static_configs:
       - targets: ['localhost:6387']
         labels:
@@ -113,7 +113,7 @@ scrape_configs:
 
   - job_name: wazo-phoned
     scheme: http
-    metrics_path: /api/phoned/0.1/metrics
+    metrics_path: /phoned/0.1/metrics
     static_configs:
       - targets: ['localhost:6387']
         labels:
@@ -122,7 +122,7 @@ scrape_configs:
 
   - job_name: wazo-sysconfd
     scheme: http
-    metrics_path: /api/sysconfd/metrics
+    metrics_path: /sysconfd/metrics
     static_configs:
       - targets: ['localhost:6387']
         labels:
@@ -131,7 +131,7 @@ scrape_configs:
 
   - job_name: wazo-webhookd
     scheme: http
-    metrics_path: /api/webhookd/1.0/metrics
+    metrics_path: /webhookd/1.0/metrics
     static_configs:
       - targets: ['localhost:6387']
         labels:
@@ -139,38 +139,38 @@ scrape_configs:
           service: 'wazo-webhookd'
 
   - job_name: 'asterisk'
-    metrics_path: /api/asterisk/metrics
+    metrics_path: /asterisk/metrics
     scheme: http
     static_configs:
       - targets: ['localhost:6387']
 
   - job_name: nginx
     scheme: http
-    metrics_path: /api/nginx/metrics
+    metrics_path: /nginx/metrics
     static_configs:
       - targets: ['localhost:6387']
 
   - job_name: rabbitmq
     scheme: http
-    metrics_path: /api/rabbitmq/metrics
+    metrics_path: /rabbitmq/metrics
     static_configs:
       - targets: ['localhost:6387']
 
   - job_name: postgresql
     scheme: http
-    metrics_path: /api/postgresql/metrics
+    metrics_path: /postgresql/metrics
     static_configs:
       - targets: ['localhost:6387']
 
   - job_name: node
     scheme: http
-    metrics_path: /api/node/metrics
+    metrics_path: /node/metrics
     static_configs:
       - targets: ['localhost:6387']
 
   - job_name: process
     scheme: http
-    metrics_path: /api/process/metrics
+    metrics_path: /process/metrics
     static_configs:
       - targets: ['localhost:6387']
 ```
