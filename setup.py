@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 import yaml
-from setuptools import find_packages, setup
+from setuptools import setup
 
 with open('wazo/plugin.yml') as file:
     metadata = yaml.load(file, Loader=yaml.SafeLoader)
@@ -37,16 +37,10 @@ fastapi_entry_points = {
 }
 
 setup(
-    name=metadata['name'],
     version=metadata['version'],
     description=metadata['display_name'],
     author=metadata['author'],
     url=metadata['homepage'],
-    packages=find_packages(),
-    include_package_data=True,
-    package_data={
-        'wazo_prometheus_exporter.plugins.flask.metric': ['api.yml'],
-    },
     entry_points=dict(
         **fastapi_entry_points,
         **flask_entry_points,

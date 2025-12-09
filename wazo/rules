@@ -8,6 +8,7 @@ declare -a new_services=(
     "node_exporter"
     "process_exporter"
 )
+
 declare -a to_restart=(
     "wazo-agentd"
     "wazo-amid"
@@ -24,16 +25,19 @@ declare -a to_restart=(
 
 case "$1" in
     build)
-        python3 setup.py bdist
-        URL=$(curl -s https://api.github.com/repos/prometheus/node_exporter/releases/latest| grep browser_download_url|grep linux-amd64|cut -d '"' -f 4)
+        python3 -m build --wheel
+        URL=$(curl -s https://api.github.com/repos/prometheus/node_exporter/releases/latest | grep browser_download_url | grep linux-amd64 | cut -d '"' -f 4)
         wget "$URL"
         filename=$(echo "$URL" | sed 's/.*\///')
-        tar xvf "$filename"
+        tar -xvf "$filename"
         ;;
 
     package)
         # shellcheck disable=SC2154
-        tar xvf dist/wazo-prometheus-exporter-*.tar.gz -C "${pkgdir}"
+        python3 -m pip install dist/*.whl \
+            --prefix /usr \
+            --root "${pkgdir}" \
+            --no-deps
         mkdir -p "${pkgdir}/usr/local/bin"
         mv node_exporter-*.linux-amd64/node_exporter "${pkgdir}/usr/local/bin/"
         cp -R etc "${pkgdir}/"

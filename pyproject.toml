@@ -1,3 +1,24 @@
+[project]
+name = "wazo-prometheus-exporter"
+dynamic = [
+    "description",
+    "version",
+    "authors",
+    "urls",
+    "entry-points",
+]
+
+[build-system]
+requires = ["setuptools", "wheel", "pyyaml"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["wazo_prometheus_exporter*"]
+
+[tool.setuptools.package-data]
+wazo_prometheus_exporter = ["plugins/flask/metric/api.yml"]
+
 [tool.mypy]
 python_version = "3.11"
 show_error_codes = true
