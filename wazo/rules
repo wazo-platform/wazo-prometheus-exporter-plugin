@@ -38,6 +38,8 @@ case "$1" in
             --prefix /usr \
             --root "${pkgdir}" \
             --no-deps
+        find "${pkgdir}" -type f -name '*.pyc' -delete
+        find "${pkgdir}" -type d -name '__pycache__' -exec rmdir {} +
         mkdir -p "${pkgdir}/usr/local/bin"
         mv node_exporter-*.linux-amd64/node_exporter "${pkgdir}/usr/local/bin/"
         cp -R etc "${pkgdir}/"
