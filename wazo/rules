@@ -1,5 +1,5 @@
 #!/bin/bash
-# Copyright 2023-2025 Wazo Team (see the AUTHORS file)
+# Copyright 2023-2026 The Wazo Authors  (see the AUTHORS file)
 # SPDX-License-Identifier: GPL-3.0+
 
 declare -a new_services=(
@@ -46,9 +46,9 @@ case "$1" in
         ;;
 
     install)
-        # Should be the first step to allow setupd for reconnecting and
-        # publishing progress.
-        systemctl restart rabbitmq-server || :
+        # shellcheck disable=SC1091
+        . /etc/default/rabbitmq-server
+        rabbitmq-plugins --node "$RABBITMQ_NODENAME" enable --online rabbitmq_management
 
         sudo -u postgres psql << EOF
 CREATE USER postgres_exporter WITH PASSWORD 'postgres-exporter-password';
@@ -79,10 +79,9 @@ EOF
         ;;
 
     uninstall)
-        # Should be the first step to allow setupd for reconnecting and
-        # publishing progress.
-        rm -f /etc/rabbitmq/enabled_plugins
-        systemctl restart rabbitmq-server || :
+        # shellcheck disable=SC1091
+        . /etc/default/rabbitmq-server
+        rabbitmq-plugins --node "$RABBITMQ_NODENAME" disable --online rabbitmq_management
 
         sudo -u postgres psql << EOF
 REVOKE CONNECT ON DATABASE postgres FROM postgres_exporter;
