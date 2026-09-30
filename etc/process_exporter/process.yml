@@ -4,3 +4,27 @@ process_names:
     - asterisk
     - nginx
     - postgres
+    - wazo-agentd
+    - wazo-agid
+    - wazo-amid
+    - wazo-auth
+    - wazo-call-logd
+    - wazo-calld
+    - wazo-chatd
+    - wazo-confd
+    - wazo-dird
+    - wazo-dxtora
+    - wazo-phoned
+    - wazo-plugind
+    - wazo-webhookd
+    - wazo-websocketd
+  # Their comm is set by twistd3 or gunicorn
+  - name: wazo-sysconfd
+    cmdline:
+    - '^gunicorn: .* \[sysconfd(-api)?\]'
+  - name: wazo-confgend
+    cmdline:
+    - --python=/usr/bin/wazo-confgend
+  - name: wazo-provd
+    cmdline:
+    - twistd3 .* wazo-provd$
