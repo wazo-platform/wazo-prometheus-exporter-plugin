@@ -18,6 +18,9 @@ process_names:
     - wazo-plugind
     - wazo-webhookd
     - wazo-websocketd
+  - name: rabbitmq
+    comm:
+    - beam.smp
   # Their comm is set by twistd3 or gunicorn
   - name: wazo-sysconfd
     cmdline:
