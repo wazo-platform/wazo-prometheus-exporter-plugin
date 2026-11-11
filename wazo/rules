@@ -67,10 +67,8 @@ EOF
         done
 
         asterisk -rx 'module load res_prometheus' || :
-        asterisk -rx 'module reload res_prometheus' || :
 
-        # Each service's own nginx location now denies its metrics
-        rm -f /etc/nginx/locations/https-enabled/block-metrics
+        ln -sf /etc/nginx/locations/https-available/block-metrics /etc/nginx/locations/https-enabled/block-metrics
         ln -sf /etc/nginx/sites-available/nginx-metrics /etc/nginx/sites-enabled/nginx-metrics
         ln -sf /etc/nginx/sites-available/zzz-proxy-metrics /etc/nginx/sites-enabled/zzz-proxy-metrics
         systemctl reload nginx || :
