@@ -1,6 +1,10 @@
 # wazo-prometheus-exporter-plugin
 
-Adds `/metrics` to the wazo-auth service as well as Asterisk and Nginx
+Exposes the Prometheus metrics of a Wazo stack on port 6387: the Wazo services,
+Asterisk, Nginx, PostgreSQL, RabbitMQ, the host (node exporter) and its processes.
+
+Requires Wazo 26.11 or later. The Wazo services ship their own `metrics` plugin,
+disabled by default; this plugin enables it, and adds the one of wazo-sysconfd.
 
 ## Installation
 
